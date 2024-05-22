@@ -162,7 +162,7 @@ function default_settings() {
   CPU_TYPE=" -cpu host"
   CORE_COUNT="2"
   RAM_SIZE="4096"
-  RAM_SIZE="32"
+  DISK_SIZE="32"
   BRG="vmbr0"
   MAC="$GEN_MAC"
   VLAN=""
@@ -294,7 +294,7 @@ function advanced_settings() {
     exit-script
   fi
 
-  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate Disk in GiB" 8 58 32 --title "RAM" --cancel-button Exit-Script 3>&1 1>&2 2>&3); then
+  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate Disk in GiB" 8 58 32 --title "Disk" --cancel-button Exit-Script 3>&1 1>&2 2>&3); then
     if [ -z $DISK_SIZE ]; then
       DISK_SIZE="32"
       echo -e "${DGN}Allocated Disk: ${BGN}$DISK_SIZE${CL}"
@@ -462,7 +462,7 @@ pvesm alloc $STORAGE $VMID $DISK0 4M 1>&/dev/null
 qm importdisk $VMID ${FILE%.*} $STORAGE ${DISK_IMPORT:-} 1>&/dev/null
 qm set $VMID \
   -efidisk0 ${DISK0_REF}${FORMAT} \
-  -scsi0 ${DISK1_REF},${DISK_CACHE}${THIN}size=32G \
+  -scsi0 ${DISK1_REF},${DISK_CACHE}${THIN}size=${DISK_SIZE}G \
   -boot order=scsi0 \
   -description "<div align='center'><a href='https://Helper-Scripts.com' target='_blank' rel='noopener noreferrer'><img src='https://raw.githubusercontent.com/tteck/Proxmox/main/misc/images/logo-81x112.png'/></a>
 
