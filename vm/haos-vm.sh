@@ -162,6 +162,7 @@ function default_settings() {
   CPU_TYPE=" -cpu host"
   CORE_COUNT="2"
   RAM_SIZE="4096"
+  RAM_SIZE="32"
   BRG="vmbr0"
   MAC="$GEN_MAC"
   VLAN=""
@@ -175,6 +176,7 @@ function default_settings() {
   echo -e "${DGN}Using CPU Model: ${BGN}Host${CL}"
   echo -e "${DGN}Allocated Cores: ${BGN}${CORE_COUNT}${CL}"
   echo -e "${DGN}Allocated RAM: ${BGN}${RAM_SIZE}${CL}"
+  echo -e "${DGN}Allocated Disk: ${BGN}${DISK_SIZE}${CL}"
   echo -e "${DGN}Using Bridge: ${BGN}${BRG}${CL}"
   echo -e "${DGN}Using MAC Address: ${BGN}${MAC}${CL}"
   echo -e "${DGN}Using VLAN: ${BGN}Default${CL}"
@@ -287,6 +289,17 @@ function advanced_settings() {
       echo -e "${DGN}Allocated RAM: ${BGN}$RAM_SIZE${CL}"
     else
       echo -e "${DGN}Allocated RAM: ${BGN}$RAM_SIZE${CL}"
+    fi
+  else
+    exit-script
+  fi
+
+  if DISK_SIZE=$(whiptail --backtitle "Proxmox VE Helper Scripts" --inputbox "Allocate Disk in GiB" 8 58 32 --title "RAM" --cancel-button Exit-Script 3>&1 1>&2 2>&3); then
+    if [ -z $DISK_SIZE ]; then
+      DISK_SIZE="32"
+      echo -e "${DGN}Allocated Disk: ${BGN}$DISK_SIZE${CL}"
+    else
+      echo -e "${DGN}Allocated Disk: ${BGN}$DISK_SIZE${CL}"
     fi
   else
     exit-script
